@@ -46,7 +46,7 @@ else:
 import paho.mqtt.client as mqtt
     
 mqtt_broker = "test.mosquitto.org"
-topic = "tp/eng/iotp/pc_01"
+topic = "smarthome/BME280/SummaryData"
 
 while True:
     #Client is created
@@ -58,7 +58,7 @@ while True:
 
     try:
         #Publishing the data to the MQTT broker, Topic is named BME280/SummaryData
-        my_mqtt.publish(BME280/SummaryData, AllData_BME280)
+        my_mqtt.publish(topic, AllData_BME280)
         print("--BME280 data summary = " % AllData_BME280)
     
     except:
