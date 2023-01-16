@@ -1,5 +1,10 @@
 #This is the main file that the smart home program will run on.
 
+from gpiozero import LED
+fan = LED(17)
+
+buzzer = LED(18)
+
 #Configuring the code for BME280
 #importing the required libs for using the BME280
 import bme280
@@ -16,18 +21,12 @@ bme280.load_calibration_params(bus,address)
 
 #Start loop
 BME280_status = 1 #Value set at 1 for ON and 0 for OFF, this determines if the BME280 is using the sensors.
-while BME280_status = 1:
+
+while True:
     bme280_data = bme280.sample(bus,address)
     humidity  = bme280_data.humidity
     pressure  = bme280_data.pressure
     ambient_temperature = bme280_data.temperature
-
-    '''
-    printing the data for now, we will send this to the MQTT Broker later.
-    print("The humidity = " + humidity)
-    print("The Air Pressure = " + pressure)
-    print("The temperature = " + ambient_temperature)
-    '''
 
     #Creating a  summary value for sending the data to the MQTT broker.
     #This can be used to present all data during testing too :))
@@ -36,9 +35,42 @@ while BME280_status = 1:
 
     #Make the BME280 chip delay by 1sec
     sleep(1)
-else:
-        print("Loop done")
 
+
+
+    if ambient_temperature > 28.5:
+        fan.on()
+        buzzer.on()
+
+    else:
+        fan.off()
+        buzzer.off()
+        print("zzz")
+
+
+'''
+while True:
+    bme280_data = bme280.sample(bus,address)
+    humidity  = bme280_data.humidity
+    pressure  = bme280_data.pressure
+    ambient_temperature = bme280_data.temperature
+
+    #Creating a  summary value for sending the data to the MQTT broker.
+    #This can be used to present all data during testing too :))
+    AllData_BME280 = ("\nThe humidity = " + str(humidity) + "\nThe Air Pressure = " + str(pressure) + "\nThe temperature = " + str(ambient_temperature))
+    print(AllData_BME280)
+
+    #Make the BME280 chip delay by 1sec
+    sleep(1)
+
+    if ambient_temperature > 30:
+        fan.on()
+        sleep(3)
+        fan.off()
+        sleep(3)
+    else:
+        print("zzz")
+'''
 
 #configuring the code for the MQTT broker
 #install mqtt if not done before
@@ -69,3 +101,6 @@ while True:
         #to print the message if the device disconnected from the mqtt broker
         my_mqtt.disconnect()
         print("--disconnected from broker")
+
+
+
