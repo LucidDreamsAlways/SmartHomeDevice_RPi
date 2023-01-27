@@ -21,7 +21,7 @@ bme280.load_calibration_params(bus,address)
 
 #Start loop
 BME280_status = 1 #Value set at 1 for ON and 0 for OFF, this determines if the BME280 is using the sensors.
-
+ 
 while True:
     bme280_data = bme280.sample(bus,address)
     humidity  = bme280_data.humidity
@@ -48,29 +48,7 @@ while True:
         print("zzz")
 
 
-'''
-while True:
-    bme280_data = bme280.sample(bus,address)
-    humidity  = bme280_data.humidity
-    pressure  = bme280_data.pressure
-    ambient_temperature = bme280_data.temperature
 
-    #Creating a  summary value for sending the data to the MQTT broker.
-    #This can be used to present all data during testing too :))
-    AllData_BME280 = ("\nThe humidity = " + str(humidity) + "\nThe Air Pressure = " + str(pressure) + "\nThe temperature = " + str(ambient_temperature))
-    print(AllData_BME280)
-
-    #Make the BME280 chip delay by 1sec
-    sleep(1)
-
-    if ambient_temperature > 30:
-        fan.on()
-        sleep(3)
-        fan.off()
-        sleep(3)
-    else:
-        print("zzz")
-'''
 
 #configuring the code for the MQTT broker
 #install mqtt if not done before
@@ -81,17 +59,22 @@ mqtt_broker = "test.mosquitto.org"
 topic = "smarthome/BME280/SummaryData"
 
 while True:
+
+	#Summary data
+	summary_data = AllData_BME280
+	
     #Client is created
     my_mqtt = mqtt.Client()
     print("\nCreated client object at "+ time.strftime("%H:%M:%S"))
+    
     #MQTT is now connected to port 1883, note that this is not a secure port. We will use port 8883 for a more secure connecion.
     my_mqtt.connect(mqtt_broker, port=1883)
     print("--connected to broker")
 
     try:
         #Publishing the data to the MQTT broker, Topic is named BME280/SummaryData
-        my_mqtt.publish(topic, AllData_BME280)
-        print("--BME280 data summary = " % AllData_BME280)
+        my_mqtt.publish(topic, summary_data)
+        print("--BME280 data summary = " % summary_data)
     
     except:
         #To print error if the data is not published
@@ -101,6 +84,50 @@ while True:
         #to print the message if the device disconnected from the mqtt broker
         my_mqtt.disconnect()
         print("--disconnected from broker")
+        
 
+import argparse
+from influxdb import InfluxDBClient
+from influxdb.client import InfluxDBClientError
+import datetime
+import time
+import random
 
+USER = 'root'
+PASSWORD = 'root'
+DBNAME = 'mydb'
+HOST = 'localhost'
+PORT = 8086
+dbclient = None;
+
+def main():
+    dbclient = InfluxDBClient(HOST, PORT, USER, PASSWORD, DBNAME)
+    while True:
+        port = 1
+        address = 0x76 #This is the port use on pypi.org/project/RPi.bme280 but note that this is not the same chip we have, similar tho...
+        bus = smbus2.SMBus(port)
+
+        #calibration parameters for BME280
+        bme280.load_calibration_params(bus,address)
+
+        #Start loop
+        BME280_status = 1 #Value set at 1 for ON and 0 for OFF, this determines if the BME280 is using the sensors.
+ 
+        while True:
+            bme280_data = bme280.sample(bus,address)
+            humidity  = bme280_data.humidity
+            pressure  = bme280_data.pressure
+            ambient_temperature = bme280_data.temperature
+
+            #Creating a  summary value for sending the data to the MQTT broker.
+            #This can be used to present all data during testing too :))
+            AllData_BME280 = ("\nThe humidity = " + str(humidity) + "\nThe Air Pressure = " + str(pressure) + "\nThe temperature = " + str(ambient_temperature))
+            print(AllData_BME280)
+            time.sleep(2)
+
+            
+return(pointValues)
+    if __name__ == '__main__':
+    main()
+    Main.py
 
