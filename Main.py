@@ -2,7 +2,6 @@
 
 from gpiozero import LED
 fan = LED(17)
-
 buzzer = LED(18)
 
 #Configuring the code for BME280
@@ -41,7 +40,6 @@ while True:
     if ambient_temperature > 28.5:
         fan.on()
         buzzer.on()
-
     else:
         fan.off()
         buzzer.off()
@@ -54,38 +52,44 @@ while True:
 #install mqtt if not done before
 #sudo apt-get mosquitto
 import paho.mqtt.client as mqtt
-    
-mqtt_broker = "test.mosquitto.org"
+import time
+
+mqtt_broker = "172.20.10.12"  # replace with the IP address of your laptop
 topic = "smarthome/BME280/SummaryData"
 
 while True:
+    # Summary data
+    summary_data = AllData_BME280  # assuming this variable contains the string you want to publish
 
-	#Summary data
-	summary_data = AllData_BME280
-	
-    #Client is created
+    # Create a new client object
     my_mqtt = mqtt.Client()
     print("\nCreated client object at "+ time.strftime("%H:%M:%S"))
-    
-    #MQTT is now connected to port 1883, note that this is not a secure port. We will use port 8883 for a more secure connecion.
-    my_mqtt.connect(mqtt_broker, port=1883)
+
+    # Connect to the broker
+    my_mqtt.connect(mqtt_broker, port=1883)  # assuming you're using the default MQTT port
     print("--connected to broker")
 
     try:
-        #Publishing the data to the MQTT broker, Topic is named BME280/SummaryData
+        # Publish the data to the broker
         my_mqtt.publish(topic, summary_data)
-        print("--BME280 data summary = " % summary_data)
-    
+        print("--BME280 data summary = " + str(summary_data))
+
     except:
-        #To print error if the data is not published
+        # Print an error message if the data is not published
         print("--error publishing!")
-    
+
     else:
-        #to print the message if the device disconnected from the mqtt broker
+        # Disconnect from the broker and print a message
         my_mqtt.disconnect()
         print("--disconnected from broker")
-        
 
+    # Add a delay before the next iteration
+    time.sleep(60)
+
+
+
+        
+'''
 import argparse
 from influxdb import InfluxDBClient
 from influxdb.client import InfluxDBClientError
@@ -130,4 +134,4 @@ return(pointValues)
     if __name__ == '__main__':
     main()
     Main.py
-
+'''
