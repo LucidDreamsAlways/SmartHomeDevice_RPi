@@ -1,4 +1,4 @@
-# IOT-Project Smart Home Device
+# Smart Home Device IOT-Project
  Smart Home Device for monitoring room and controlling A/C(simulated by fan)
  
  The first file(SensorData.py) of code is written for a Raspberry Pi and is responsible for collecting environmental data using a BME280 sensor, which measures temperature, humidity, and pressure. It also controls a fan and a buzzer based on the temperature readings. Once the data is collected, it is published to an MQTT broker, which acts as a middleman, forwarding the data to other devices that are connected to the network.
