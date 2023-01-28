@@ -8,10 +8,10 @@ The second file(writesmarthomeDB.py) of code is written for a laptop and is resp
 In addition to using the Python script to collect and process the data, we can also store the data in InfluxDB, a time-series database. This will allow us to easily query and analyze the data over time. We can then use Grafana, a popular open-source dashboard tool, to visualize the data stored in InfluxDB.
 
 
-#IoT System Architecture diagram of the project
+# IoT System Architecture diagram of the project
 ![alt text](https://github.com/LucidDreamsAlways/IOT-Project/blob/main/ProjectDesign.jpeg?raw=true)
 
-#I/O pin assignment for the Raspberry Pi interface 
+# I/O pin assignment for the Raspberry Pi interface 
 | Pin No | I/O | Device name | Description    |
 |-------|-----|-------------|----------------|
 | 5     | GPIO3 | BME280    | SCL (Clock)    |
