@@ -8,4 +8,4 @@ The second file(writesmarthomeDB.py) of code is written for a laptop and is resp
 In addition to using the Python script to collect and process the data, we can also store the data in InfluxDB, a time-series database. This will allow us to easily query and analyze the data over time. We can then use Grafana, a popular open-source dashboard tool, to visualize the data stored in InfluxDB.
 
 
-![alt text](https://github.com/LucidDreamsAlways/IOT-Project/blob/main/ProjectDesign.png?raw=true)
+![alt text](https://github.com/LucidDreamsAlways/IOT-Project/blob/main/ProjectDesign.jpeg?raw=true)
