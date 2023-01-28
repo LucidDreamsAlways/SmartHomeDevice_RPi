@@ -1,13 +1,14 @@
 import bme280
 import smbus2
 import time
+import json
 import paho.mqtt.client as mqtt
 from gpiozero import LED
 
 #Assign piGPIO pins for fan and buzzer
 fan = LED(17)
 buzzer = LED(18)
-fanStatus = 0
+
 
 # BME280 sensor configuration
 port = 1
@@ -17,11 +18,10 @@ bme280.load_calibration_params(bus, address)
 
 # MQTT broker configuration
 mqtt_broker = "172.20.10.12"
-#topicSummary = "smarthome/BME280/summary"
+topicSummary = "smarthome/BME280/summary"
 topicTemp = "smarthome/BME280/temperature"
 topicHumid = "smarthome/BME280/humidity"
 topicPressure = "smarthome/BME280/pressure"
-topicFanStatus = "smarthome/fan/status"
 
 # Callback function for when the client receives a CONNACK response from the server
 def on_connect(client, userdata, flags, rc):
@@ -52,27 +52,29 @@ while True:
     #Controlling the fan and buzzer
     if ambient_temperature > 28.5:
         fan.on()
-        fanStatus = 1
         buzzer.on()
         
     else:
         fan.off()
         buzzer.off()
-        fanStatus = 0
-        print("fan is not on = " + str(fanStatus))
+        print("zzz")
     
-    # Create a summary of the data
-    summary_data = ("\nThe humidity = " + str(humidity) + "\nThe Air Pressure = " + str(pressure) + "\nThe temperature = " + str(ambient_temperature))
+    summary_data = {
+    "humidity": humidity,
+    "pressure": pressure,
+    "temperature": ambient_temperature
+    }
+    
+    summary_data = json.dumps(summary_data)
     print(summary_data)
 
-    # Publish the temperature data to the broker
-    client.publish(topicTemp, ambient_temperature)
-    client.publish(topicHumid, humidity)
-    client.publish(topicPressure, pressure)
-    #client.publish(topicSummary, summary_data)
-    client.publish(topicFanStatus, fanStatus)
-    
-    # Delay for 2 seconds
+# Publish the temperature data to the broker
+    client.publish(topicTemp, json.dumps({"temperature": ambient_temperature}))
+    client.publish(topicHumid, json.dumps({"humidity": humidity}))
+    client.publish(topicPressure, json.dumps({"pressure": pressure}))
+    client.publish(topicSummary, summary_data)
+
+# Delay for 2 seconds
     time.sleep(2)
 
     #INFLUXDB API TOKEN
