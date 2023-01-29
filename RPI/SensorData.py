@@ -34,8 +34,8 @@ def on_message(client, userdata, msg):
     if msg.topic == topicFanControl:
         global fanControl
         fanControl = int(msg.payload)
-    
     print(msg.topic + " " + str(msg.payload))
+
 
 # Create an MQTT client instance
 client = mqtt.Client()
@@ -82,5 +82,3 @@ while True:
     
     # Delay for 2 seconds
     time.sleep(2)
-    #INFLUXDB API TOKEN
-    #12K458hLkOcay-2psj7QQ3g8NJvA-ewKe6wGeaJpLlS5Gw367c1wTW0Zgyrrei4b23ULk770BHLOwy3WjmuWzw==
