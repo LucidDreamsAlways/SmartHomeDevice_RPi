@@ -1,7 +1,12 @@
 import paho.mqtt.client as mqtt
 
 # List of topics to subscribe to
-topics = ["smarthome/BME280/summary", "smarthome/BME280/temperature", "smarthome/BME280/humidity", "smarthome/BME280/pressure"]
+#topics = ["smarthome/BME280/summary", "smarthome/BME280/temperature", "smarthome/BME280/humidity", "smarthome/BME280/pressure", "smarthome/fan/control", "smarthome/fan/status"]
+
+#I belive if you do "0" it will subscribe to all available topics
+#topics = ["0"]
+
+topics = ["smarthome/fan/control", "smarthome/fan/status"]
 
 # Callback function for when a message is received on a subscribed topic
 def on_message(client, userdata, msg):

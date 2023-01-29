@@ -78,6 +78,7 @@ while True:
     client.publish(topicPressure, pressure)
     #client.publish(topicSummary, summary_data)
     client.publish(topicFanStatus, fanStatus)
+    client.publish(topicFanControl, fanControl)
     
     # Delay for 2 seconds
     time.sleep(2)
