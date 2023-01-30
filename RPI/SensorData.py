@@ -71,6 +71,8 @@ while True:
     # Create a summary of the data
     summary_data = ("\nThe humidity = " + str(humidity) + "\nThe Air Pressure = " + str(pressure) + "\nThe temperature = " + str(ambient_temperature))
     print(summary_data)
+    print("----->Topics published----->")
+    
     
     # Publish the temperature data to the broker
     client.publish(topicTemp, ambient_temperature)
