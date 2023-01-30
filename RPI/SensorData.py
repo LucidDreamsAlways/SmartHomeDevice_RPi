@@ -28,14 +28,15 @@ topicFanControl = "smarthome/fan/control"
 # Callback function for when the client receives a CONNACK response from the server
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
+    client.subscribe(topicFanControl)
 
 # Callback function for when a PUBLISH message is received from the server
 def on_message(client, userdata, msg):
+    global fanControl
     if msg.topic == topicFanControl:
-        global fanControl
         fanControl = int(msg.payload)
     print(msg.topic + " " + str(msg.payload))
-
+        
 
 # Create an MQTT client instance
 client = mqtt.Client()
@@ -80,7 +81,8 @@ while True:
     client.publish(topicPressure, pressure)
     #client.publish(topicSummary, summary_data)
     client.publish(topicFanStatus, fanStatus)
-    client.publish(topicFanControl, fanControl)
+    #client.publish(topicFanControl, fanControl)
     
+    #client.subscribe(topicFanControl, fanControl)
     # Delay for 2 seconds
     time.sleep(2)
