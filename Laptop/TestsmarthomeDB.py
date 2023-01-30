@@ -41,6 +41,7 @@ def on_message(client, userdata, msg):
             "fields": {"value": value}
         }
     ]
+    #Save data into InfluxDB
     dbclient.write_points(data_point)
 
 # Initialize MQTT client
