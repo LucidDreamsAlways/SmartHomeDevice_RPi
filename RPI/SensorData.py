@@ -84,5 +84,3 @@ while True:
     
     # Delay for 2 seconds
     time.sleep(2)
-    client.loop()
-
