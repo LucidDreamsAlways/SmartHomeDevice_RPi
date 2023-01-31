@@ -4,7 +4,7 @@ from influxdb import InfluxDBClient
 # MQTT connection details
 MQTT_BROKER = "172.20.10.12"
 MQTT_PORT = 1883
-MQTT_TOPICS = ["smarthome/BME280/temperature", "smarthome/BME280/humidity", "smarthome/BME280/pressure", "smarthome/fan/status"]
+MQTT_TOPICS = ["smarthome/BME280/temperature", "smarthome/BME280/humidity", "smarthome/BME280/pressure", "smarthome/fan/status", "smarthome/fan/control"]
 
 # InfluxDB connection details
 INFLUXDB_HOST = "localhost"
@@ -28,7 +28,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print("Received message on topic " + msg.topic + ": " + str(msg.payload))
     payload = msg.payload.decode("utf-8") # decode the payload from bytes to string
-    measurement = msg.topic.split("/")[-1]
+    measurement = msg.topic.split("/")[-1] #Used to extract name from topic, "-1" uses the last value when it is split using "/"
     try:
         # Try to convert the payload to a float
         value = float(payload)
@@ -41,6 +41,7 @@ def on_message(client, userdata, msg):
             "fields": {"value": value}
         }
     ]
+    #Save data into InfluxDB
     dbclient.write_points(data_point)
 
 # Initialize MQTT client

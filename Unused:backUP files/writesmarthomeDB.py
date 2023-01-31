@@ -4,7 +4,7 @@ from influxdb import InfluxDBClient
 # MQTT connection details
 MQTT_BROKER = "172.20.10.12"
 MQTT_PORT = 1883
-MQTT_TOPICS = ["smarthome/BME280/temperature", "smarthome/BME280/humidity", "smarthome/BME280/pressure", "smarthome/fan/status", "smarthome/fan/control"]
+MQTT_TOPICS = ["smarthome/BME280/temperature", "smarthome/BME280/humidity", "smarthome/BME280/pressure", "smarthome/fan/status"]
 
 # InfluxDB connection details
 INFLUXDB_HOST = "localhost"
