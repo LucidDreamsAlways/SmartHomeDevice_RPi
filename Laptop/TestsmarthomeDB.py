@@ -28,7 +28,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print("Received message on topic " + msg.topic + ": " + str(msg.payload))
     payload = msg.payload.decode("utf-8") # decode the payload from bytes to string
-    measurement = msg.topic.split("/")[-1]
+    measurement = msg.topic.split("/")[-1] #Used to extract name from topic, "-1" uses the last value when it is split using "/"
     try:
         # Try to convert the payload to a float
         value = float(payload)
